@@ -44,6 +44,9 @@ export default {
                   return new Response('Object Not Found', { status: 404 });
                 }
 
+                const headers = new Headers();
+                headers.set('Access-Control-Allow-Origin', '*');
+
                 // if current image is too old, replace with placeholder
                 let age = now.getTime() - object.uploaded.getTime();
                 if (age > MAX_CURRENT_AGE) {
@@ -55,17 +58,20 @@ export default {
                   }
                 }
 
-                const headers = new Headers();
-                object.writeHttpMetadata(headers);
-                headers.set('etag', object.httpEtag);
-                headers.set('Access-Control-Allow-Origin', '*');
+                headers.set('etag', object.etag);
+                const requestEtag = request.headers.get('if-none-match')
+                if (requestEtag) {
+                  if (object.etag === requestEtag) {
+                    return new Response(null, { status: 304, headers });
+                  }
+                }
 
+                object.writeHttpMetadata(headers);
                 return new Response(object.body, {
                   headers,
                 });
 			}
 
-			// TODO: add image compression
 		}
 
 		return new Response("Not found", {
