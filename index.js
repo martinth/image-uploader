@@ -1,8 +1,7 @@
 
 const SECRET_PUT_KEY = "479F111E64F34B7ABC39B6B7710F3585";
 const LATEST_IMAGE_KEY = "latest.jpg";
-const MAX_CURRENT_AGE = 60 * 60 * 1000; /* 1h in ms */
-//const MAX_CURRENT_AGE = 10 * 1000; /* 1s in ms */
+const MAX_CURRENT_AGE = 10 * 60 * 1000; /* in ms */
 const NO_LIVE_IMAGE_KEY = "no_live_image.jpg"
 
 export default {
